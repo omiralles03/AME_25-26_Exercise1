@@ -4,55 +4,55 @@
 [![Platform: STM32 Nucleo](https://img.shields.io/badge/Platform-STM32%20Nucleo-002B49.svg)](https://www.st.com/)
 [![Course: AME](https://img.shields.io/badge/Course-Embedded%20%26%20Mobile%20Applications-orange.svg)](https://www.urv.cat/)
 
-A C++ software component and test application for interfacing an NTC thermistor temperature sensor using an STM32 Nucleo board and Mbed OS[cite: 2, 4]. Developed for the *Embedded and Mobile Applications* course (Universitat Rovira i Virgili)[cite: 2, 4].
+A C++ software component and test application for interfacing an NTC thermistor temperature sensor using an STM32 Nucleo board and Mbed OS. Developed for the *Embedded and Mobile Applications* course (Universitat Rovira i Virgili).
 
 ---
 
 ## Overview
 
-This project implements a reusable hardware abstraction library to sample, calculate, and report ambient temperature from an analog NTC thermistor[cite: 2, 4]. An accompanying Mbed OS test application demonstrates continuous sampling, analog-to-digital conversion, and temperature conversion via serial output[cite: 2, 4].
+This project implements a reusable hardware abstraction library to sample, calculate, and report ambient temperature from an analog NTC thermistor. An accompanying Mbed OS test application demonstrates continuous sampling, analog-to-digital conversion, and temperature conversion via serial output.
 
 ### Key Specifications
 
 | Parameter | Specification / Value |
 | :--- | :--- |
-| **Operating Voltage** | 3.3 V to 5 V (*3.3 V recommended*)[cite: 2] |
-| **Detectable Range** | -40 °C to +125 °C[cite: 2] |
-| **Measurement Accuracy** | ±1.5 °C[cite: 2] |
-| **Zero-Power Resistance ($R_0$)** | 100 kΩ at 25 °C ($T_0 = 298.15\text{ K}$)[cite: 2, 3] |
-| **Balancing Resistor ($R_b$)** | 100 kΩ[cite: 3] |
-| **B-Constant ($\beta_{25/100}$)** | 4250 K to 4299 K[cite: 2, 3] |
-| **Resistance Tolerance** | ±1%[cite: 2] |
+| **Operating Voltage** | 3.3 V to 5 V (*3.3 V recommended*) |
+| **Detectable Range** | -40 °C to +125 °C |
+| **Measurement Accuracy** | ±1.5 °C |
+| **Zero-Power Resistance ($R_0$)** | 100 kΩ at 25 °C ($T_0 = 298.15\text{ K}$) |
+| **Balancing Resistor ($R_b$)** | 100 kΩ |
+| **B-Constant ($\beta_{25/100}$)** | 4250 K to 4299 K |
+| **Resistance Tolerance** | ±1% |
 
 ---
 
 ## Theory & Conversion Model
 
-The thermistor exhibits a negative temperature coefficient (NTC)—its resistance decreases non-linearly as temperature increases[cite: 2].
+The thermistor exhibits a negative temperature coefficient (NTC)—its resistance decreases non-linearly as temperature increases.
 
 1. **Thermistor Resistance ($R_{therm}$):**  
-   Derived from the voltage divider formed by balance resistor $R_b$ (100 kΩ) and the ADC raw counts[cite: 2, 3]:
+   Derived from the voltage divider formed by balance resistor $R_b$ (100 kΩ) and the ADC raw counts:
    $$R_{therm} = R_b \cdot \left(\frac{\text{ADC}_{\text{res}}}{\text{counts}} - 1\right)$$
-   *Where $\text{ADC}_{\text{res}} = 65535$ for `read_u16()` or $1.0$ for normalized `read()`[cite: 3].*
+   *Where $\text{ADC}_{\text{res}} = 65535$ for `read_u16()` or $1.0$ for normalized `read()`.*
 
 2. **Temperature in Kelvin ($T_K$):**  
-   Computed via the B-parameter equation[cite: 2]:
+   Computed via the B-parameter equation:
    $$T_K = \frac{1}{\frac{1}{\beta} \ln\left(\frac{R_{therm}}{R_0}\right) + \frac{1}{T_0}}$$
-   *Using $R_0 = 100\text{ k}\Omega$, $T_0 = 298.15\text{ K}$, and nominal $\beta \approx 4275\text{ K}$[cite: 2, 3].*
+   *Using $R_0 = 100\text{ k}\Omega$, $T_0 = 298.15\text{ K}$, and nominal $\beta \approx 4275\text{ K}$.*
 
 3. **Temperature in Celsius ($T_C$):**  
    $$T_C = T_K - 273.15$$
-[cite: 2, 3]
+
 
 ---
 
 ## Hardware Setup
 
-* **Microcontroller:** STM32 Nucleo board[cite: 4]
-* **Expansion:** Sensor shield[cite: 4]
-* **Sensor:** 100 kΩ NTC thermistor module[cite: 2, 4]
+* **Microcontroller:** STM32 Nucleo board
+* **Expansion:** Sensor shield
+* **Sensor:** 100 kΩ NTC thermistor module
 * **Connections:**
-  * `VCC` $\rightarrow$ `3.3V`[cite: 2]
+  * `VCC` $\rightarrow$ `3.3V`
   * `GND` $\rightarrow$ `GND`
   * `SIG / OUT` $\rightarrow$ Target Analog Input Pin (e.g., `A0`)
 
