@@ -1,4 +1,4 @@
-# NTC Thermistor Driver & Monitor (AME 26-17 Optional exercise 1)
+# NTC Thermistor Driver & Monitor (Mbed OS)
 
 [![Framework: Mbed OS](https://img.shields.io/badge/Framework-Mbed%20OS-blue.svg)](https://os.mbed.com/)
 [![Platform: STM32 Nucleo](https://img.shields.io/badge/Platform-STM32%20Nucleo-002B49.svg)](https://www.st.com/)
@@ -30,17 +30,22 @@ This project implements a reusable hardware abstraction library to sample, calcu
 
 The thermistor exhibits a negative temperature coefficient (NTC)—its resistance decreases non-linearly as temperature increases.
 
-1. **Thermistor Resistance ($R_{therm}$):**  
-   Derived from the voltage divider formed by balance resistor $R_b$ (100 kΩ) and the ADC raw counts:
-   $$R_{therm} = R_b \cdot \left(\frac{\text{ADC}_{\text{res}}}{\text{counts}} - 1\right)$$
-   *Where $\text{ADC}_{\text{res}} = 65535$ for `read_u16()` or $1.0$ for normalized `read()`.*
+1. **Thermistor Resistance ($R_{therm}$)**  
+   Derived from the voltage divider formed by balance resistor $R_b$ (100 kΩ) and the raw ADC counts:
 
-2. **Temperature in Kelvin ($T_K$):**  
-   Computed via the B-parameter equation:
+   $$R_{therm} = R_b \cdot \left(\frac{\mathrm{ADC}_{res}}{\mathrm{counts}} - 1\right)$$
+
+   Where **$\mathrm{ADC}_{res}$** is $65535$ when using `read_u16()`, or $1.0$ when using normalized `read()`.
+
+2. **Temperature in Kelvin ($T_K$)**  
+   Computed using the B-parameter equation:
+
    $$T_K = \frac{1}{\frac{1}{\beta} \ln\left(\frac{R_{therm}}{R_0}\right) + \frac{1}{T_0}}$$
-   *Using $R_0 = 100\text{ k}\Omega$, $T_0 = 298.15\text{ K}$, and nominal $\beta \approx 4275\text{ K}$.*
 
-3. **Temperature in Celsius ($T_C$):**  
+   Where **$R_0$** = $100\text{ k}\Omega$, **$T_0$** = $298.15\text{ K}$, and nominal **$\beta$** $\approx 4275\text{ K}$.
+
+3. **Temperature in Celsius ($T_C$)**  
+
    $$T_C = T_K - 273.15$$
 
 
@@ -52,9 +57,9 @@ The thermistor exhibits a negative temperature coefficient (NTC)—its resistanc
 * **Expansion:** Sensor shield
 * **Sensor:** 100 kΩ NTC thermistor module
 * **Connections:**
-  * `VCC` $\rightarrow$ `3.3V`
-  * `GND` $\rightarrow$ `GND`
-  * `SIG / OUT` $\rightarrow$ Target Analog Input Pin (e.g., `A0`)
+  * `VCC` -> `3.3V`
+  * `GND` -> `GND`
+  * `SIG / OUT` -> Target Analog Input Pin (e.g., `A0`)
 
 ---
 
